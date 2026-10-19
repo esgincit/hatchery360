@@ -1,0 +1,54 @@
+project_id = "poultryos"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+enabled = true
+site_url = "poultryos://login-callback"
+additional_redirect_urls = ["http://localhost:3000"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = true
+# provider = twilio | messagebird | textlocal | vonage  (MSG91 via custom hook)
+[auth.sms.test_otp]
+919849012345 = "123456"   # demo owner (VKR) in local dev
+
+[storage]
+enabled = true
+file_size_limit = "20MiB"
+
+[storage.buckets.evidence]
+public = false
+allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
+
+[storage.buckets.documents]
+public = false
+
+[functions.sync-apply]
+verify_jwt = true
+[functions.ai-triage]
+verify_jwt = true
+[functions.market-rates]
+verify_jwt = false
+[functions.daily-alerts]
+verify_jwt = false
+[functions.razorpay-webhook]
+verify_jwt = false
+
+[functions.provision-tenant]
+verify_jwt = true

@@ -1,0 +1,18 @@
+name: Supabase migrate
+on:
+  push:
+    branches: [main]
+    paths: ['supabase/**']
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with: { version: latest }
+      - run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+        env: { SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }} }
+      - run: supabase db push
+        env: { SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}, SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }} }
+      - run: supabase functions deploy market-rates daily-alerts sync-apply ai-triage razorpay-webhook provision-tenant
+        env: { SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }} }

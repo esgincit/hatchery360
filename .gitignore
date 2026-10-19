@@ -1,0 +1,7 @@
+mobile/lib/env.dart
+mobile/build/
+mobile/.dart_tool/
+mobile/**/*.g.dart
+.supabase/
+node_modules/
+__pycache__/
